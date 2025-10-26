@@ -119,7 +119,7 @@ class ControllerDetailScreen extends ConsumerWidget {
                     child: modulesState.when(
                       data: (modules) => modules.isEmpty
                           ? _buildEmptyModulesState(context)
-                          : _buildModulesList(context, modules),
+                          : _buildModulesList(context, ref, modules),
                       loading: () => const Center(child: CircularProgressIndicator()),
                       error: (error, stack) => Center(
                         child: Column(
@@ -213,7 +213,7 @@ class ControllerDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildModulesList(BuildContext context, List<WeighModule> modules) {
+  Widget _buildModulesList(BuildContext context, WidgetRef ref, List<WeighModule> modules) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: modules.length,
@@ -265,19 +265,21 @@ class ControllerDetailScreen extends ConsumerWidget {
                   ),
                 ),
               ],
-              onSelected: (value) {
-                if (value == 'edit') {
-                  _showEditModuleDialog(context, ref, module);
-                } else if (value == 'delete') {
-                  _showDeleteModuleDialog(context, ref, module);
-                }
-              },
+              onSelected: (value) => _handleModuleMenuSelection(context, ref, value, module),
             ),
             onTap: () => context.go('/modules/${module.id}'),
           ),
         );
       },
     );
+  }
+
+  void _handleModuleMenuSelection(BuildContext context, WidgetRef ref, String? value, WeighModule module) {
+    if (value == 'edit') {
+      _showEditModuleDialog(context, ref, module);
+    } else if (value == 'delete') {
+      _showDeleteModuleDialog(context, ref, module);
+    }
   }
 
   void _showAddModuleDialog(BuildContext context, WidgetRef? ref) {

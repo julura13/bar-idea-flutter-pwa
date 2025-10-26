@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const String baseUrl = 'http://localhost:8000/api';
+  static const String baseUrl = 'http://localhost:8080/api';
   static const String websocketUrl = 'ws://localhost:6001';
   
   // API Endpoints

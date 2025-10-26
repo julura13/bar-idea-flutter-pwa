@@ -69,7 +69,7 @@ class ControllersListScreen extends ConsumerWidget {
             child: controllersState.when(
               data: (controllers) => controllers.isEmpty
                   ? _buildEmptyState(context)
-                  : _buildControllersList(context, controllers),
+                  : _buildControllersList(context, ref, controllers),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stack) => Center(
                 child: Column(
@@ -128,7 +128,7 @@ class ControllersListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildControllersList(BuildContext context, List<Controller> controllers) {
+  Widget _buildControllersList(BuildContext context, WidgetRef ref, List<Controller> controllers) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: controllers.length,
@@ -181,19 +181,21 @@ class ControllersListScreen extends ConsumerWidget {
                   ),
                 ),
               ],
-              onSelected: (value) {
-                if (value == 'edit') {
-                  _showEditControllerDialog(context, ref, controller);
-                } else if (value == 'delete') {
-                  _showDeleteControllerDialog(context, ref, controller);
-                }
-              },
+              onSelected: (value) => _handleMenuSelection(context, ref, value, controller),
             ),
             onTap: () => context.go('/controllers/${controller.id}'),
           ),
         );
       },
     );
+  }
+
+  void _handleMenuSelection(BuildContext context, WidgetRef ref, String? value, Controller controller) {
+    if (value == 'edit') {
+      _showEditControllerDialog(context, ref, controller);
+    } else if (value == 'delete') {
+      _showDeleteControllerDialog(context, ref, controller);
+    }
   }
 
   void _showAddControllerDialog(BuildContext context, WidgetRef? ref) {

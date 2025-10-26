@@ -29,7 +29,7 @@ class MyApp extends ConsumerWidget {
     );
   }
 
-  GoRouter _createRouter(AsyncValue<AuthState> authState) {
+  GoRouter _createRouter(AuthState authState) {
     return GoRouter(
       initialLocation: '/login',
       routes: [
@@ -57,8 +57,8 @@ class MyApp extends ConsumerWidget {
         ),
       ],
       redirect: (context, state) {
-        final isLoggedIn = authState.value?.isAuthenticated ?? false;
-        final isLoggingIn = state.location == '/login';
+        final isLoggedIn = authState.isAuthenticated;
+        final isLoggingIn = state.uri.path == '/login';
         
         if (!isLoggedIn && !isLoggingIn) {
           return '/login';
